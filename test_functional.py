@@ -38,6 +38,7 @@ class FunctionalTest(unittest.TestCase):
 
         self.browser.implicitly_wait(3)
         self.assertEqual('http://localhost:8000/signup', self.browser.current_url)
+        self.assertEqual('Welcome to To-Do List, Raine! | To-Do List', self.browser.title)
         self.assertIn('Congratulations! You have successfully signed up.', self.browser.find_element_by_tag_name("body").text)
         self.assertIn('Start my to-do list', self.browser.find_element_by_tag_name("body").text)
 
