@@ -6,3 +6,7 @@ def index(request):
     context = {'test': 'test'}
     return render(request, 'lists/index.html', context)
 
+def signup(request):
+    name = request.POST['name']
+    context = {'name' : name}
+    return render(request, 'lists/signup.html', context)
