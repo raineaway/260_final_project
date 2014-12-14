@@ -1,5 +1,7 @@
 from selenium import webdriver
 from django.contrib.auth.models import User
+from datetime import datetime
+from django.utils import formats
 import unittest
 
 class FunctionalTest(unittest.TestCase):
@@ -141,7 +143,7 @@ class FunctionalTest(unittest.TestCase):
         self.browser.implicitly_wait(3)
 
         self.assertIn('Today', self.browser.find_element_by_tag_name("body").text)
-        self.assertIn(datetime.date.today(), self.browser.find_element_by_tag_name("body").text)
+        self.assertIn(datetime.now().strftime("%A, %B %d, %Y"), self.browser.find_element_by_tag_name("body").text)
 
         self.assertIn('You have no to-do items yet.', self.browser.find_element_by_tag_name("body").text)
         self.assertIn('Create one now.', self.browser.find_element_by_tag_name("body").text)
@@ -150,8 +152,9 @@ class FunctionalTest(unittest.TestCase):
 
         self.browser.implicitly_wait(3)
 
-        self.browser.assertIn('http://localhost:8000/create_item', self.browser.current_url)
-        self.browser.assertIn('Create a Task', self.browser.find_element_by_tag_name("body").text)
+        self.assertIn('http://localhost:8000/create_item', self.browser.current_url)
+        self.assertEqual('Create an Item | To-Do List', self.browser.title)
+        self.assertIn('Create an Item', self.browser.find_element_by_tag_name("body").text)
         self.assertTrue(self.browser.find_element_by_name("task_name").size > 1)
         self.assertTrue(self.browser.find_element_by_xpath("//input[@value='Create']").size > 1)
 
@@ -160,15 +163,15 @@ class FunctionalTest(unittest.TestCase):
         
         self.browser.implicitly_wait(3)
 
-        self.browser.assertIn('http://localhost:8000', self.browser.current_url)
+        self.assertIn('http://localhost:8000', self.browser.current_url)
         self.assertIn('Finish the project', self.browser.find_element_by_tag_name("body").text)
 
         self.browser.get('http://localhost:8000/delete_test')
         
 
     def test_order(self):
-        self.Test_signup()
-        self.Test_login()
+        #self.Test_signup()
+        #self.Test_login()
         self.Test_add_list_item()
 
 if __name__ == '__main__':
