@@ -1,0 +1,24 @@
+<html>
+<title>Sign In | To-Do List</title>
+
+<body>
+<div class="home">
+    <div class="home-welcome">
+        <h1>Sign In with To-Do List</h1>
+    </div>
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    <div class="home-actions">
+        <div class="signin-form">
+            <form action="signin" method="post">
+                <div><input type="text" name="username" placeholder="Username" /></div>
+                <div><input type="password" name="password" placeholder="Password" /></div>
+                {% csrf_token %}
+                <div><input type="submit" value="Log In" class="submit" /></div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

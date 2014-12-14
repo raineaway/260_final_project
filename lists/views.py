@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     #return HttpResponse("<html><title>To-Do List</title></html>");
@@ -19,10 +19,24 @@ def signup(request):
     user = authenticate(username=request.POST['username'], password=request.POST['password'])
     login(request, user)
 
-    #user = User.objects.get(username=request.POST['username'])
-
     context = {'user' : user}
     return render(request, 'lists/signup.html', context)
+
+def signin(request):
+    if request.method == 'POST':
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            context = {'error': 'Invalid credentials'}
+            return render(request, 'lists/login.html', context)
+    else:
+        return render(request, 'lists/login.html')
+
+def signout(request):
+    logout(request)
+    return redirect('/')
 
 def delete_test(request):
     user = User.objects.get(username='raineaway')

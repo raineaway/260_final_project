@@ -6,7 +6,7 @@
     {% if user.is_authenticated %}
         <div class="navbar">
             <div>Hello, {{ user.first_name }}</div>
-            <div><a href="">Logout</a></div>
+            <div><a href="signout" class="logout">Logout</a></div>
         </div>
     {% else %}
         <div class="home-welcome">
@@ -24,7 +24,7 @@
                     <div><input type="submit" value="Create an Account" class="submit" /></div>
                 </form>
             </div>
-            Have an account? <a href="">Log In</a>
+            Have an account? <a href="signin" class="login">Log In</a>
         </div>
     {% endif %}
 </div>
