@@ -58,8 +58,14 @@ WSGI_APPLICATION = 'list.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'list',
+        'TEST_NAME': 'test_list',
+        'USER': 'list-admin',
+        'PASSWORD': 'l1st@dm1n',
+        'HOST': 'localhost'
     }
 }
 
