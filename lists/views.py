@@ -23,3 +23,7 @@ def signup(request):
 
     context = {'user' : user}
     return render(request, 'lists/signup.html', context)
+
+def delete_test(request):
+    user = User.objects.get(username='raineaway')
+    user.delete()
