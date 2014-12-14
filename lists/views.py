@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from lists.models import Item
+from datetime import date, datetime
 
 def index(request):
     #return HttpResponse("<html><title>To-Do List</title></html>");
     if request.user.is_authenticated():
-        context = {'name': request.user.first_name}
+        items = Item.objects.filter(user_id=request.user.id)
+        context = {'name': request.user.first_name, 'items': items, 'is_today': True, 'date':datetime.now()}
     else:
         context = {'test': 'test'}
     return render(request, 'lists/index.html', context)
@@ -38,6 +41,23 @@ def signout(request):
     logout(request)
     return redirect('/')
 
+def create_item(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            item = Item(user=request.user, name=request.POST['task_name'])
+            item.save()
+        return redirect('/')
+    else:
+        return render(request, 'lists/create_item.html')
+
+    
+
 def delete_test(request):
     user = User.objects.get(username='raineaway')
+    
     user.delete()
+
+    item = Item.objects.get(name='Finish the project', user=user)
+    if item.count > 0:
+        item.delete()
+

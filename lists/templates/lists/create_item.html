@@ -1,0 +1,20 @@
+<html>
+<title>Create an Item | To-Do List</title>
+
+<body>
+<div class="home">
+    <div class="home-welcome">
+        <h1>Create an Item</h1>
+    </div>
+    <div class="home-actions">
+        <div class="item-form">
+            <form action="create_item" method="post">
+                <div>Task: <input type="text" name="task_name" /></div>
+                {% csrf_token %}
+                <div><input type="submit" value="Create" class="submit" /></div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

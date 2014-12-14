@@ -7,6 +7,26 @@
         <div class="navbar">
             <div>Hello, {{ user.first_name }}</div>
             <div><a href="signout" class="logout">Logout</a></div>
+
+            <div class="date">
+                {% if is_today %}
+                    <span>Today&nbsp;|&nbsp;</span>
+                {% endif %}
+                <span>{{ date|date:"l, F d, Y" }}</span>
+            </div>
+
+            <div class="items">
+                {% if items.count == 0 %}
+                    You have no to-do items yet. <a href="create_item" class="create">Create one now.</a>
+                {% else %}
+                    {% for item in items %}
+                        <div class="item"><input type="checkbox" value="{{ item.id }}" />
+                            {{ item.name }}
+                            <div class="right">Cancel</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     {% else %}
         <div class="home-welcome">
