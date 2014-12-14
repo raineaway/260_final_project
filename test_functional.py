@@ -16,18 +16,25 @@ class FunctionalTest(unittest.TestCase):
 
         # page should load the To-Do List landing page
         self.assertIn('To-Do List', self.browser.title)
-
         self.assertIn('Welcome to To-Do List!', self.browser.find_element_by_tag_name("body").text)
-        self.assertIn('Create an Account', self.browser.find_element_by_tag_name("body").text)
-        self.assertIn('Log In', self.browser.find_element_by_tag_name("body").text)
+        #self.assertIn('Create an Account', self.browser.find_element_by_tag_name("body").text)
+        #self.assertIn('Log In', self.browser.find_element_by_tag_name("body").text)
+
+        # home page should contain sign up form, for easier and faster sign up for new users
+        self.assertTrue(self.browser.find_element_by_name("name").size > 1)
+        self.assertTrue(self.browser.find_element_by_name("username").size > 1)
+        self.assertTrue(self.browser.find_element_by_name("email").size > 1)
+        self.assertTrue(self.browser.find_element_by_name("password").size > 1)
+        self.assertTrue(self.browser.find_element_by_name("confirm_password").size > 1)
+        self.assertTrue(self.browser.find_element_by_class_name("submit").size > 1)
 
         # clicking on Create an Account should redirect to sign up page
-        self.browser.find_element_by_link_text('Create an Account').click()
-        self.browser.implicitly_wait(3)
-        self.assertEqual('http://localhost:8000/signup', self.browser.current_url)
+        #self.browser.find_element_by_link_text('Create an Account').click()
+        #self.browser.implicitly_wait(3)
+        #self.assertEqual('http://localhost:8000/signup', self.browser.current_url)
 
         # sign up page should contain the sign up form
-        self.assertEqual('Sign Up | To-Do List', self.browser.title)
+        #self.assertEqual('Sign Up | To-Do List', self.browser.title)
 
         self.fail('Finish the test!')
 
