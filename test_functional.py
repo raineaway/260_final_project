@@ -28,6 +28,19 @@ class FunctionalTest(unittest.TestCase):
         self.assertTrue(self.browser.find_element_by_name("confirm_password").size > 1)
         self.assertTrue(self.browser.find_element_by_class_name("submit").size > 1)
 
+        # fill up and submit the form (valid input first)
+        self.browser.find_element_by_name("name").send_keys("Raine")
+        self.browser.find_element_by_name("username").send_keys("raineaway")
+        self.browser.find_element_by_name("email").send_keys("ltedrosa@gmail.com")
+        self.browser.find_element_by_name("password").send_keys("password")
+        self.browser.find_element_by_name("confirm_password").send_keys("password")
+        self.browser.find_element_by_class_name("submit").click()
+
+        self.browser.implicitly_wait(3)
+        self.assertEqual('http://localhost:8000/signup', self.browser.current_url)
+        self.assertIn('Congratulations! You have successfully signed up.', self.browser.find_element_by_tag_name("body").text)
+        self.assertIn('Start my to-do list', self.browser.find_element_by_tag_name("body").text)
+
         # clicking on Create an Account should redirect to sign up page
         #self.browser.find_element_by_link_text('Create an Account').click()
         #self.browser.implicitly_wait(3)
