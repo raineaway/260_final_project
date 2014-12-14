@@ -1,4 +1,5 @@
 from selenium import webdriver
+from django.contrib.auth.models import User
 import unittest
 
 class FunctionalTest(unittest.TestCase):
@@ -9,6 +10,7 @@ class FunctionalTest(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
+        User.objects.all().delete()
 
     def test_can_signup(self):
         # check homepage
@@ -46,7 +48,7 @@ class FunctionalTest(unittest.TestCase):
         # click on Start my to-do list; should be redirected to home page, but this time user must be logged in already.
         self.browser.find_element_by_tag_name("a").click()
         self.browser.implicitly_wait(3)
-        self.assertEqual('http://localhost:8000', self.browser.current_url)
+        self.assertIn('http://localhost:8000', self.browser.current_url)
         self.assertIn('Hello, Raine', self.browser.find_element_by_tag_name("body").text)
 
         # clicking on Create an Account should redirect to sign up page
