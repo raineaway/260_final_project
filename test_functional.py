@@ -36,11 +36,18 @@ class FunctionalTest(unittest.TestCase):
         self.browser.find_element_by_name("confirm_password").send_keys("password")
         self.browser.find_element_by_class_name("submit").click()
 
+        # after submitting, should be redirected to successfully signed up page
         self.browser.implicitly_wait(3)
         self.assertEqual('http://localhost:8000/signup', self.browser.current_url)
         self.assertEqual('Welcome to To-Do List, Raine! | To-Do List', self.browser.title)
         self.assertIn('Congratulations! You have successfully signed up.', self.browser.find_element_by_tag_name("body").text)
         self.assertIn('Start my to-do list', self.browser.find_element_by_tag_name("body").text)
+
+        # click on Start my to-do list; should be redirected to home page, but this time user must be logged in already.
+        self.browser.find_element_by_tag_name("a").click()
+        self.browser.implicitly_wait(3)
+        self.assertEqual('http://localhost:8000', self.browser.current_url)
+        self.assertIn('Hello, Raine', self.browser.find_element_by_tag_name("body").text)
 
         # clicking on Create an Account should redirect to sign up page
         #self.browser.find_element_by_link_text('Create an Account').click()
