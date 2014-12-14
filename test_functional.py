@@ -101,8 +101,9 @@ class FunctionalTest(unittest.TestCase):
 
         # should display the login form
         self.browser.implicitly_wait(3)
-        self.assertIn('http://localhost:8000/login', self.browser.current_url)
-        self.assertIn('Sign In', self.browser.find_element_by_tag_name("body").text)
+        self.assertIn('http://localhost:8000/signin', self.browser.current_url)
+        self.assertIn('Sign In', self.browser.title)
+        self.assertIn('Sign In with To-Do List', self.browser.find_element_by_tag_name("body").text)
         self.assertTrue(self.browser.find_element_by_name("username").size > 1)
         self.assertTrue(self.browser.find_element_by_name("password").size > 1)
         self.assertTrue(self.browser.find_element_by_class_name("submit").size > 1)
