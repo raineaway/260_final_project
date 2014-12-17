@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from lists.models import Item
 from datetime import date, datetime
+import json
 
 def index(request):
     #return HttpResponse("<html><title>To-Do List</title></html>");
@@ -50,6 +51,15 @@ def create_item(request):
     else:
         return render(request, 'lists/create_item.html')
 
+def check_item(request):
+    if request.user.is_authenticated():
+        item = Item.objects.get(id=request.POST['id'])
+        if item.user_id == request.user.id:
+            item.status = "done"
+            item.save()
+            return HttpResponse(json.dumps({'status':'ok'}), content_type="application/json")
+        return HttpResponse(json.dumps({'status':'fail', 'message':'Invalid item.'}))
+    return redirect('/')
     
 
 def delete_test(request):

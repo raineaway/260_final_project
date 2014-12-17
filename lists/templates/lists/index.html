@@ -1,6 +1,9 @@
 <html>
+<head>
 <title>To-Do List</title>
-
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'jquery-1.11.1.min.js' %}"></script>
+</head>
 <body>
 <div class="home">
     {% if user.is_authenticated %}
@@ -20,9 +23,19 @@
                     You have no to-do items yet. <a href="create_item" class="create">Create one now.</a>
                 {% else %}
                     {% for item in items %}
-                        <div class="item"><input type="checkbox" value="{{ item.id }}" />
+                        <div class="item">
+                            <input id="item_{{ item.id }}" type="checkbox" value="{{ item.id }}"
+                                {% if item.status == 'done' %}checked:checked{% endif %} onclick="checkItem({{ item.id }})" />
                             {{ item.name }}
-                            <div class="right">Cancel</div>
+                            <div id="actions_{{ item.id }}" class="right">
+                                {% if item.status == 'done' %}
+                                    Done
+                                {% elif item.status == 'cancelled' %}
+                                    Cancelled
+                                {% else %}
+                                    Cancel
+                                {% endif %}
+                            </div>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -37,7 +50,7 @@
                 <form action="signup" method="post">
                     <div><input type="text" name="name" placeholder="Name" /></div>
                     <div><input type="text" name="username" placeholder="Username" /></div>
-                    <div><input type="text" name="email"  placeholder="Email" /></div>
+                    <div><input type="text" name="email" placeholder="Email" /></div>
                     <div><input type="password" name="password" placeholder="Password" /></div>
                     <div><input type="password" name="confirm_password" placeholder="Confirm Password" /></div>
                     {% csrf_token %}
@@ -48,5 +61,49 @@
         </div>
     {% endif %}
 </div>
+<script type="text/javascript">
+//$(document).ready(function(){
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function checkItem(item_id) {
+        var csrf = getCookie('csrftoken');
+        $.ajax({
+            url: 'check_item',
+            type: 'post',
+            data: {
+                id: item_id,
+                csrfmiddlewaretoken: csrf
+            },
+            dataType: 'json',
+            success: function(json){
+                if (json['status'] == 'ok') {
+                    $('#success').css('display', 'block');
+                    $('#fail').css('display', 'none');
+                    $('#actions_' + item_id).html("Done");
+                } else {
+                    $('#fail').text(json['message']);
+                    $('#fail').css('display', 'block');
+                }
+            }
+        });
+    }
+
+//});
+</script>
 </body>
 </html>
