@@ -89,6 +89,31 @@ class UnitTest(unittest.TestCase):
         item = Item.objects.get(name="Test item")
         self.assertEqual('done', item.status)
 
+    def test_uncheck_item(self):
+        response = self.register_user()
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.login_user()
+        self.assertEqual(response.status_code, 200)
+
+        response = self.create_item()
+        self.assertEqual(response.status_code, 200)
+
+        item = Item.objects.get(name="Test item")
+        response = self.client.post('/check_item', {'id':item.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('{"status": "ok"}', response.content)
+
+        item = Item.objects.get(name="Test item")
+        self.assertEqual('done', item.status)
+
+        response = self.client.post('/check_item', {'id':item.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('{"status": "ok", "item_status": "pending"}', response.content)
+
+        item = Item.objects.get(name="Test item")
+        self.assertEqual('pending', item.status)
+
 
 
 if __name__ == '__main__':
