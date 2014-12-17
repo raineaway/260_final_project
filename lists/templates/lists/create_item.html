@@ -1,15 +1,22 @@
 <html>
+<head>
 <title>Create an Item | To-Do List</title>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+</head>
 
 <body>
 <div class="home">
-    <div class="home-welcome">
-        <h1>Create an Item</h1>
+    <div class="navbar">
+        <div class="greeting">Hello, {{ user.first_name }}</div>
+        <div class="logout-container"><a href="signout" class="logout">Logout</a></div>
     </div>
-    <div class="home-actions">
+    <div style="clear: left;"></div>
+    <div style="padding:10px;">
+        <div class="date display_date">Create an Item</div>
         <div class="item-form">
             <form action="create_item" method="post">
-                <div>Task: <input type="text" name="task_name" /></div>
+                <div>Task:&nbsp;&nbsp;<input type="text" name="task_name" /></div>
                 {% csrf_token %}
                 <div><input type="submit" value="Create" class="submit" /></div>
             </form>

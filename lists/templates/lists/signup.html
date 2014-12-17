@@ -1,7 +1,13 @@
 <html>
+<head>
 <title>Welcome to To-Do List, {{ user.first_name }}! | To-Do List</title>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+</head>
 <body>
+<div class="home-signin">
 <h2>Congratulations! You have successfully signed up.</h2>
-<a href="/">Start my to-do list.</a>
+<a href="/" class="create">Start my to-do list.</a>
+</div>
 <body>
 </html>

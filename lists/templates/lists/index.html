@@ -3,68 +3,80 @@
 <title>To-Do List</title>
 {% load staticfiles %}
 <script type="text/javascript" src="{% static 'jquery-1.11.1.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
 </head>
 <body>
 <div class="home">
     {% if user.is_authenticated %}
         <div class="navbar">
-            <div>Hello, {{ user.first_name }}</div>
-            <div><a href="signout" class="logout">Logout</a></div>
+            <div class="greeting">Hello, {{ user.first_name }}</div>
+            <div class="logout-container"><a href="signout" class="logout">Logout</a></div>
+        </div>
+        <div style="clear: left;"></div>
 
-            <div class="date">
-                <a id="prev_day" href="/?date={{ date_counter|add:-1 }}">&lt;</a>
+        <div class="date">
+            <div class="prev"><a id="prev_day" href="/?date={{ date_counter|add:-1 }}">&lt; previous day</a></div>
+            <div class="date-container">
                 {% if is_today %}
-                    <span>Today&nbsp;|&nbsp;</span>
+                    <span class="today">Today,</span>
                 {% endif %}
-                <span>{{ display_date|date:"l, F d, Y" }}</span>
-                <a id="next_day" href="/?date={{ date_counter|add:1 }}">&gt;</a>
+                <span class="display_date">{{ display_date|date:"l, F d, Y" }}</span>
             </div>
+            <div class="next"><a id="next_day" href="/?date={{ date_counter|add:1 }}">next day &gt;</a></div>
+        </div>
+        <div style="clear: left;"></div>
 
-            <div class="items">
-                <a href="create_item" class="create">Create a to-do item</a><br/>
-                {% if items.count == 0 %}
-                    You have no to-do items.
-                {% else %}
-                    {% for item in items %}
-                        <div class="item">
-                            <div id="container_{{ item.id }}">
-                                <input id="item_{{ item.id }}" type="checkbox" value="{{ item.id }}"
-                                    {% if item.status == 'done' %}checked{% endif %} onclick="checkItem({{ item.id }})" />
-                                {{ item.name }}
-                            </div>
-                            <div id="actions_{{ item.id }}" class="right">
-                                {% if item.status == 'done' %}
-                                    Done
-                                {% elif item.status == 'cancelled' %}
-                                    Cancelled
-                                {% else %}
-                                    <div>
-                                        <a id="cancel_{{ item.id }}" onclick="cancelItem({{ item.id }})">Cancel</a>
-                                    </div>
-                                {% endif %}
-                            </div>
+        <div class="items">
+            <div id="success" style="display:none;">Successfully updated item.</div>
+            <div id="fail" style="display:none;">Unable to update item.</div>
+            <div class="create-container"><a href="create_item" class="create">+ Create a to-do item</a></div>
+            {% if items.count == 0 %}
+                You have no to-do items.
+            {% else %}
+                {% load cycle from future %}
+                {% for item in items %}
+                    <div class="item {% cycle 'row1' 'row2' %}">
+                        <div id="container_{{ item.id }}" class="item-name {% if item.status == 'cancelled' %}cancelled{% endif %}">
+                            <input id="item_{{ item.id }}" type="checkbox" value="{{ item.id }}"
+                                {% if item.status == 'done' %}checked{% endif %} onclick="checkItem({{ item.id }})" />
+                            {{ item.name }}
                         </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
+                        <div id="actions_{{ item.id }}" class="right">
+                            {% if item.status == 'done' %}
+                                <div style="color:green;">Done</div>
+                            {% elif item.status == 'cancelled' %}
+                                <div style="color:gray;">Cancelled</div>
+                            {% else %}
+                                <div style="color:#900">
+                                    <a id="cancel_{{ item.id }}" style="cursor:pointer" onclick="cancelItem({{ item.id }})">Cancel</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     {% else %}
-        <div class="home-welcome">
-            <h1>Welcome to To-Do List!</h1>
-        </div>
-        <div class="home-actions">
-            <div class="signup-form">
-                <form action="signup" method="post">
-                    <div><input type="text" name="name" placeholder="Name" /></div>
-                    <div><input type="text" name="username" placeholder="Username" /></div>
-                    <div><input type="text" name="email" placeholder="Email" /></div>
-                    <div><input type="password" name="password" placeholder="Password" /></div>
-                    <div><input type="password" name="confirm_password" placeholder="Confirm Password" /></div>
-                    {% csrf_token %}
-                    <div><input type="submit" value="Create an Account" class="submit" /></div>
-                </form>
+        <div class="home-signin">
+            <div class="home-welcome">
+                <div>Welcome to To-Do List!</div>
             </div>
-            Have an account? <a href="signin" class="login">Log In</a>
+            <div class="home-actions">
+                <div class="signup-form">
+                    <form action="signup" method="post">
+                        <div><input type="text" name="name" placeholder="Name" /></div>
+                        <div><input type="text" name="username" placeholder="Username" /></div>
+                        <div><input type="text" name="email" placeholder="Email" /></div>
+                        <div><input type="password" name="password" placeholder="Password" /></div>
+                        <div><input type="password" name="confirm_password" placeholder="Confirm Password" /></div>
+                        {% csrf_token %}
+                        <div><input type="submit" value="Create an Account" class="submit" /></div>
+                    </form>
+                </div>
+                <div class="home-account">
+                    Have an account? <a href="signin" class="login">Log In</a>
+                </div>
+            </div>
         </div>
     {% endif %}
 </div>
@@ -102,9 +114,11 @@
                     $('#success').css('display', 'block');
                     $('#fail').css('display', 'none');
                     if (json['item_status'])
-                        $('#actions_' + item_id).html("Cancel");
+                        $('#actions_' + item_id).html(
+                            "<div style='color:#900'><a id='cancel_"+item_id
+                            +"' style='cursor:pointer' onclick='cancelItem("+item_id+"'>Cancel</a>");
                     else
-                        $('#actions_' + item_id).html("Done");
+                        $('#actions_' + item_id).html("<div style='color:green;'>Done</div>");
                 } else {
                     $('#fail').text(json['message']);
                     $('#fail').css('display', 'block');
@@ -127,7 +141,7 @@
                 if (json['status'] == 'ok') {
                     $('#success').css('display', 'block');
                     $('#fail').css('display', 'none');
-                    $('#actions_' + item_id).html("Cancelled");
+                    $('#actions_' + item_id).html("<div style='color:gray'>Cancelled</div>");
                     $('#container_'+item_id).addClass('cancelled');
                     $('#item_'+item_id).attr('disabled', 'disabled');
                 } else {

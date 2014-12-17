@@ -1,0 +1,173 @@
+body {
+    background-color: #eee;
+    font-family: 'fs_elliot_proregular', Arial, sans-serif;
+    color: #000;
+    font: Verdana;
+}
+.home-signin {
+    text-align: center;
+}
+.home-welcome {
+    background-color: #8A0808;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 20pt;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+.home-actions {
+    padding: 10px;
+    text-align: center;
+}
+input[type="text"], input[type="password"] {
+    border: 1px solid #e6e4e4;
+    box-shadow: none;
+    margin-bottom: 10px;
+    height: 30px;
+    padding: 5px;
+    width: 25%;
+    font-size: 12pt;
+}
+.submit {
+    font-weight: bold;
+    padding: 10px 20px;
+}
+.home-account {
+    margin-top: 20px;
+    color: #555;
+}
+.login {
+    text-decoration: none;
+    color: #900;
+}
+
+.navbar {
+    background-color: #8A0808;
+    width: 100%;
+    font-size: 20pt;
+    color: white;
+    font-weight: bold;
+    padding-top: 23px;
+    padding-bottom: 23px;
+    display: table;
+    margin-bottom: 20px;
+}
+.greeting {
+    background-color: #8A0808;
+    width: 60%;
+    float: left;
+    font-size: 15pt;
+    display: block;
+    vertical-align: center;
+    padding-left: 20px;
+}
+.logout-container {
+    background-color: #8A0808;
+    width: 30%;
+    float: right;
+    text-align: right;
+    padding-right: 20px;
+}
+.logout {
+    font-size: 12pt;
+    text-decoration: none;
+    color: white;
+}
+.date {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    display: table;
+    border-bottom: 1px solid lightgray;
+}
+.date-container {
+    width: 65%;
+    float: left;
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+}
+.today {
+    font-size: 20pt;
+    font-weight: bold;
+}
+.display_date {
+    font-size: 20pt;
+}
+.date a {
+    text-decoration: none;
+    color: gray;
+    font-size: 10pt;
+}
+.prev {
+    width: 15%;
+    float: left;
+    display: block;
+    vertical-align: middle;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+.next {
+    float: right;
+    display: block;
+    vertical-align: middle;
+    text-align: right;
+    margin-top: 10px;
+    padding-right: 20px;
+}
+
+.items {
+    padding: 5px;
+}
+.create-container {
+    text-align: right;
+    width: 100%;
+    padding-right: 10px;
+    font-size: 12pt;
+    margin-bottom: 20px;
+}
+.create {
+    text-decoration: none;
+    color: #900;
+}
+
+.item {
+    width: 100%;
+    display: table;
+    padding: 5px;
+}
+.row1 {
+    background-color: #ddd;
+}
+.row2 {
+    background-color: #ccc;
+}
+.item-name {
+    width: 80%;
+    float: left;
+}
+.right {
+    float: right;
+    text-align: right;
+    padding-right: 10px;
+}
+.cancelled {
+    text-decoration: line-through;
+    color: gray;
+}
+#success {
+    border: 1px solid green;
+    padding: 8px;
+    color: green;
+    background-color: #cfc;
+    margin-bottom: 10px;
+}
+#fail {
+    border: 1px solid red;
+    padding: 8px;
+    color: red;
+    background-color: #fcc;
+    margin-bottom: 10px;
+}
