@@ -26,6 +26,17 @@ class UnitTest(unittest.TestCase):
         response = self.client.post('/create_item', {'task_name':'Test item'}, follow=True)
         return response
 
+    def create_superuser(self):
+        user = User.objects.create_superuser("admin", "admin@admin.org", "pass")
+        return user
+
+    def login_superuser(self, admin):
+        response = self.client.login(username='admin', password='pass')
+        self.assertTrue(response)
+        response = self.client.get('/admin/', follow=True)
+
+        return response
+
     def test_home_guest(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
@@ -166,6 +177,35 @@ class UnitTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Another test', response.content)
         self.assertNotIn('Test item', response.content)
+
+    def test_admin(self):
+        user = self.create_superuser()
+        admin = User.objects.get(username='admin')
+        self.assertEqual('admin', admin.username)
+        self.assertEqual(True, admin.is_superuser)
+
+        response = self.login_superuser(user)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertIn('model-user', response.content)
+        self.assertIn('app-lists module', response.content)
+        self.assertIn('model-item', response.content)
+
+        response = self.client.get('/admin/auth/user/')
+        self.assertEqual(response.status_code, 200)
+
+        self.assertIn('admin@admin.org', response.content)
+
+        test_user = User.objects.create_user("test_user", "test@test.org", "test")
+
+        response = self.client.get('/admin/auth/user/')
+        self.assertIn('test@test.org', response.content)
+
+        response = self.client.get('/admin/auth/user/' + str(test_user.id), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/admin/lists/item/')
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':
