@@ -71,5 +71,25 @@ class UnitTest(unittest.TestCase):
 
         self.assertIn('Test item', response.content)
 
+    def test_check_item(self):
+        response = self.register_user()
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.login_user()
+        self.assertEqual(response.status_code, 200)
+
+        response = self.create_item()
+        self.assertEqual(response.status_code, 200)
+        item = Item.objects.get(name="Test item")
+
+        response = self.client.post('/check_item', {'id':item.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('{"status": "ok"}', response.content)
+
+        item = Item.objects.get(name="Test item")
+        self.assertEqual('done', item.status)
+
+
+
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
