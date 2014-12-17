@@ -1,5 +1,6 @@
 from django.test import Client
 from django.contrib.auth.models import User
+from lists.models import Item
 import unittest
 
 class UnitTest(unittest.TestCase):
@@ -17,6 +18,10 @@ class UnitTest(unittest.TestCase):
 
     def login_user(self):
         response = self.client.post('/signin', {'username':'raineaway', 'password':'pass'}, follow=True)
+        return response
+
+    def create_item(self):
+        response = self.client.post('/create_item', {'task_name':'Test item'}, follow=True)
         return response
 
     def test_home_guest(self):
@@ -48,7 +53,23 @@ class UnitTest(unittest.TestCase):
         response = self.login_user()
         self.assertEqual(response.status_code, 200)
 
+        self.assertIn('Hello, Raine', response.content)
+
+    def test_create_item(self):
+        response = self.register_user()
+        self.assertEqual(response.status_code, 200)
         
+        response = self.login_user()
+        self.assertEqual(response.status_code, 200)
+
+        response = self.create_item()
+        self.assertEqual(response.status_code, 200)
+        item = Item.objects.get(name="Test item")
+        user = User.objects.get(username="raineaway")
+        self.assertTrue(Item.objects.filter(name="Test item").exists())
+        self.assertEqual(item.user_id, user.id)
+
+        self.assertIn('Test item', response.content)
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
