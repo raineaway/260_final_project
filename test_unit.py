@@ -1,7 +1,9 @@
 from django.test import Client
 from django.contrib.auth.models import User
 from lists.models import Item
+from django.utils import timezone
 import unittest
+import datetime
 
 class UnitTest(unittest.TestCase):
 
@@ -129,6 +131,41 @@ class UnitTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual('{"status": "ok"}', response.content)
 
+    def test_filter_items(self):
+        response = self.register_user()
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.login_user()
+        self.assertEqual(response.status_code, 200)
+
+        response = self.create_item()
+        self.assertEqual(response.status_code, 200)
+
+        item = Item.objects.get(name="Test item")
+        user_id = item.user_id
+        user = User.objects.get(id=user_id)
+
+        yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
+        item2 = Item(user=user, name="Another test", date_created=yesterday, date_modified=yesterday)
+        item2.save()
+
+        response = self.client.get('/')
+        self.assertIn('Test item', response.content)
+        self.assertIn('Another test', response.content)
+
+        item2 = Item.objects.get(name="Another test")
+        item2.status = "done"
+        item2.date_modified = yesterday
+        item2.save()
+
+        response = self.client.get('/')
+        self.assertIn('Test item', response.content)
+        self.assertNotIn('Another test', response.content)
+
+        response = self.client.get('/?date=-1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Another test', response.content)
+        self.assertNotIn('Test item', response.content)
 
 
 if __name__ == '__main__':
