@@ -22,8 +22,6 @@ class FunctionalTest(unittest.TestCase):
         # page should load the To-Do List landing page
         self.assertIn('To-Do List', self.browser.title)
         self.assertIn('Welcome to To-Do List!', self.browser.find_element_by_tag_name("body").text)
-        #self.assertIn('Create an Account', self.browser.find_element_by_tag_name("body").text)
-        #self.assertIn('Log In', self.browser.find_element_by_tag_name("body").text)
 
         # home page should contain sign up form, for easier and faster sign up for new users
         self.assertTrue(self.browser.find_element_by_name("name").size > 1)
@@ -56,16 +54,6 @@ class FunctionalTest(unittest.TestCase):
 
         # manually delete created user in production
         self.browser.get('http://localhost:8000/delete_test')
-
-        # clicking on Create an Account should redirect to sign up page
-        #self.browser.find_element_by_link_text('Create an Account').click()
-        #self.browser.implicitly_wait(3)
-        #self.assertEqual('http://localhost:8000/signup', self.browser.current_url)
-
-        # sign up page should contain the sign up form
-        #self.assertEqual('Sign Up | To-Do List', self.browser.title)
-
-        #self.fail('Finish the test!')
 
     def Test_login(self):
         self.browser.get('http://localhost:8000')
@@ -392,13 +380,13 @@ class FunctionalTest(unittest.TestCase):
         self.assertIn('Django administration', self.browser.find_element_by_tag_name("body").text)
 
 
-    #def test_order(self):
-        #self.Test_signup()
-        #self.Test_login()
-        #self.Test_add_list_item()
-        #self.Test_check_item()
-        #self.Test_uncheck_item()
-        #self.Test_cancel_item()
+    def test_order(self):
+        self.Test_signup()
+        self.Test_login()
+        self.Test_add_list_item()
+        self.Test_check_item()
+        self.Test_uncheck_item()
+        self.Test_cancel_item()
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
