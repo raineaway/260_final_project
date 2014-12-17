@@ -25,7 +25,7 @@
                     {% for item in items %}
                         <div class="item">
                             <input id="item_{{ item.id }}" type="checkbox" value="{{ item.id }}"
-                                {% if item.status == 'done' %}checked:checked{% endif %} onclick="checkItem({{ item.id }})" />
+                                {% if item.status == 'done' %}checked{% endif %} onclick="checkItem({{ item.id }})" />
                             {{ item.name }}
                             <div id="actions_{{ item.id }}" class="right">
                                 {% if item.status == 'done' %}
@@ -94,7 +94,10 @@
                 if (json['status'] == 'ok') {
                     $('#success').css('display', 'block');
                     $('#fail').css('display', 'none');
-                    $('#actions_' + item_id).html("Done");
+                    if (json['item_status'])
+                        $('#actions_' + item_id).html("Cancel");
+                    else
+                        $('#actions_' + item_id).html("Done");
                 } else {
                     $('#fail').text(json['message']);
                     $('#fail').css('display', 'block');

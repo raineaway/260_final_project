@@ -55,9 +55,16 @@ def check_item(request):
     if request.user.is_authenticated():
         item = Item.objects.get(id=request.POST['id'])
         if item.user_id == request.user.id:
-            item.status = "done"
-            item.save()
-            return HttpResponse(json.dumps({'status':'ok'}), content_type="application/json")
+            response = {}
+            if item.status == "pending":
+                item.status = "done"
+                item.save()
+                response = {'status':'ok'}
+            else:
+                item.status = "pending"
+                item.save()
+                response = {'status':'ok', 'item_status':'pending'}
+            return HttpResponse(json.dumps(response), content_type="application/json")
         return HttpResponse(json.dumps({'status':'fail', 'message':'Invalid item.'}))
     return redirect('/')
     
