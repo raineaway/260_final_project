@@ -385,13 +385,20 @@ class FunctionalTest(unittest.TestCase):
         self.browser.get('http://localhost:8000/delete_test')
 
 
-    def test_order(self):
+    def Test_admin(self):
+        self.browser.get('http://localhost:8000/admin')
+        self.browser.implicitly_wait(3)
+
+        self.assertIn('Django administration', self.browser.find_element_by_tag_name("body").text)
+
+
+    #def test_order(self):
         #self.Test_signup()
         #self.Test_login()
         #self.Test_add_list_item()
-        self.Test_check_item()
-        self.Test_uncheck_item()
-        self.Test_cancel_item()
+        #self.Test_check_item()
+        #self.Test_uncheck_item()
+        #self.Test_cancel_item()
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
